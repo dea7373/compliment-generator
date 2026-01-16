@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentic Compliment Generator - Spread Positivity</title>
+    <meta name="description" content="Generate personalized, authentic compliments to brighten your day">
+    
+    <!-- Font Imports -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ===== CSS VARIABLES & RESET ===== */
+        :root {
+            /* Color Palette - Organized for easy theming */
+            --primary-coral: #FF6B6B;
+            --warm-cream: #FFF8F0;
+            --deep-charcoal: #2D3436;
+            --gentle-peach: #FFB088;
+            --sage-green: #A8DADC;
+            --soft-gray: #DFE6E9;
+            
+            /* Typography Scale */
+            --font-heading: 'Fraunces', serif;
+            --font-body: 'Fraunces', serif;
+            
+            /* Spacing System (8px base) */
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2rem;
+            --space-xl: 3rem;
+            
+            /* Animation Timings */
+            --transition-fast: 150ms ease;
+            --transition-medium: 300ms ease;
+            --transition-slow: 500ms ease;
+            
+            /* Shadow System */
+            --shadow-sm: 0 2px 8px rgba(45, 52, 54, 0.08);
+            --shadow-md: 0 4px 16px rgba(45, 52, 54, 0.12);
+            --shadow-lg: 0 8px 32px rgba(45, 52, 54, 0.16);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* ===== BASE STYLES ===== */
+        body {
+            font-family: var(--font-body);
+            background: var(--warm-cream);
+            color: var(--deep-charcoal);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-md);
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* ===== ANIMATED BACKGROUND ===== */
+        /* Creates floating gradient orbs for visual interest without distraction */
+        .background-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.15;
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary-coral);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+        
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--sage-green);
+            bottom: -50px;
+            right: -50px;
+            animation-delay: 5s;
+        }
+        
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: var(--gentle-peach);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: 10s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(30px, -30px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+        }
+        
+        /* ===== MAIN CONTAINER ===== */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-lg);
+            animation: slideUp 0.6s var(--transition-slow);
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* ===== HEADER ===== */
+        header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+        
+        h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(1.75rem, 5vw, 2.5rem);
+            color: var(--primary-coral);
+            margin-bottom: var(--space-sm);
+            letter-spacing: -0.02em;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            color: var(--deep-charcoal);
+            opacity: 0.7;
+            font-weight: 400;
+        }
+        
+        /* ===== STATS SECTION ===== */
+        /* Displays engagement metrics to show product value to recruiters */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+            padding: var(--space-md);
+            background: var(--warm-cream);
+            border-radius: 16px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--primary-coral);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--deep-charcoal);
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* ===== COMPLIMENT DISPLAY ===== */
+        .compliment-container {
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-lg);
+            padding: var(--space-lg);
+            background: linear-gradient(135deg, var(--warm-cream) 0%, #fff 100%);
+            border-radius: 16px;
+            border: 2px solid var(--soft-gray);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Decorative quotation mark */
+        .compliment-container::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-size: 120px;
+            font-family: Georgia, serif;
+            color: var(--primary-coral);
+            opacity: 0.08;
+            pointer-events: none;
+        }
+        
+        .compliment-text {
+            font-family: var(--font-heading);
+            font-size: clamp(1.25rem, 4vw, 1.75rem);
+            color: var(--deep-charcoal);
+            text-align: center;
+            line-height: 1.5;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Initial state placeholder */
+        .compliment-placeholder {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--deep-charcoal);
+            opacity: 0.4;
+            font-style: italic;
+        }
+        
+        /* Animation classes applied via JavaScript */
+        .fade-out {
+            animation: fadeOut 0.3s var(--transition-medium) forwards;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s var(--transition-medium) forwards;
+        }
+        
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* ===== CATEGORY BADGE ===== */
+        /* Shows compliment category for transparency and variety awareness */
+        .category-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--sage-green);
+            color: var(--deep-charcoal);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: var(--space-sm);
+            opacity: 0;
+            transition: opacity var(--transition-medium);
+        }
+        
+        .category-badge.visible {
+            opacity: 0.8;
+        }
+        
+        /* ===== BUTTONS ===== */
+        .button-group {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        /* Primary action button with gradient and hover effect */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-coral) 0%, var(--gentle-peach) 100%);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        /* Ripple effect on click - enhances perceived responsiveness */
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn-primary:active::after {
+            width: 300px;
+            height: 300px;
+        }
+        
+        /* Disabled state */
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Secondary buttons */
+        .btn-secondary {
+            background: white;
+            color: var(--deep-charcoal);
+            border: 2px solid var(--soft-gray);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--primary-coral);
+            color: var(--primary-coral);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary:active {
+            transform: translateY(0);
+        }
+        
+        .btn-icon {
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* ===== SOCIAL SHARE SECTION ===== */
+        .share-section {
+            padding-top: var(--space-lg);
+            border-top: 1px solid var(--soft-gray);
+        }
+        
+        .share-title {
+            font-size: 0.875rem;
+            color: var(--deep-charcoal);
+            opacity: 0.7;
+            margin-bottom: var(--space-sm);
+            text-align: center;
+        }
+        
+        .share-buttons {
+            display: flex;
+            gap: var(--space-sm);
+            justify-content: center;
+        }
+        
+        .btn-share {
+            padding: 0.75rem 1.25rem;
+            background: white;
+            border: 2px solid var(--soft-gray);
+            border-radius: 12px;
+            color: var(--deep-charcoal);
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-share:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .btn-share.twitter:hover {
+            border-color: #1DA1F2;
+            color: #1DA1F2;
+        }
+        
+        .btn-share.facebook:hover {
+            border-color: #4267B2;
+            color: #4267B2;
+        }
+        
+        /* ===== TOAST NOTIFICATION ===== */
+        /* Provides feedback for copy action - enhances UX clarity */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--deep-charcoal);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            font-size: 0.875rem;
+            font-weight: 500;
+            opacity: 0;
+            transition: all var(--transition-medium);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .toast-icon {
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 640px) {
+            .container {
+                padding: var(--space-lg);
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .share-buttons {
+                flex-direction: column;
+            }
+            
+            .btn-share {
+                width: 100%;
+            }
+        }
+        
+        /* ===== ACCESSIBILITY ===== */
+        /* Focus styles for keyboard navigation */
+        .btn:focus-visible,
+        .btn-share:focus-visible {
+            outline: 3px solid var(--primary-coral);
+            outline-offset: 2px;
+        }
+        
+        /* Reduced motion for users with vestibular disorders */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background orbs -->
+    <div class="background-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    
+    <!-- Main application container -->
+    <div class="container">
+        <header>
+            <h1>You Deserve This</h1>
+            <p class="subtitle">Authentic compliments, crafted with care</p>
+        </header>
+        
+        <!-- Engagement metrics section -->
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-number" id="complimentsGenerated">0</span>
+                <span class="stat-label">Generated</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number" id="complimentsShared">0</span>
+                <span class="stat-label">Shared</span>
+            </div>
+        </div>
+        
+        <!-- Category badge (hidden initially) -->
+        <div style="text-align: center;">
+            <span class="category-badge" id="categoryBadge"></span>
+        </div>
+        
+        <!-- Compliment display area -->
+        <div class="compliment-container">
+            <p class="compliment-text compliment-placeholder" id="complimentText">
+                Click the button below to receive your personalized compliment
+            </p>
+        </div>
+        
+        <!-- Primary action buttons -->
+        <div class="button-group">
+            <button class="btn btn-primary" id="generateBtn" aria-label="Generate new compliment">
+                <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                Generate Compliment
+            </button>
+            <button class="btn btn-secondary" id="copyBtn" aria-label="Copy compliment to clipboard" style="display: none;">
+                <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                </svg>
+                Copy
+            </button>
+        </div>
+        
+        <!-- Social sharing section -->
+        <div class="share-section">
+            <p class="share-title">Share the positivity</p>
+            <div class="share-buttons">
+                <button class="btn-share twitter" id="twitterBtn" aria-label="Share on Twitter">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+                    </svg>
+                    Twitter
+                </button>
+                <button class="btn-share facebook" id="facebookBtn" aria-label="Share on Facebook">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path>
+                    </svg>
+                    Facebook
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast notification for copy feedback -->
+    <div class="toast" id="toast" role="alert" aria-live="polite">
+        <svg class="toast-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <span id="toastMessage">Copied to clipboard!</span>
+    </div>
+    
+    <script>
+        /**
+         * COMPLIMENT GENERATOR APPLICATION
+         * 
+         * Architecture Overview:
+         * - State management: In-memory objects (no localStorage as per requirements)
+         * - Smart randomization: Weighted categories + recent history tracking
+         * - UX: Smooth animations, feedback, and progressive disclosure
+         * 
+         * Key Technical Decisions:
+         * 1. Category-based organization for variety and context awareness
+         * 2. History tracking prevents immediate repetition (last 10 compliments)
+         * 3. Weighted random selection balances variety with quality
+         * 4. Template literals allow for dynamic compliment construction
+         */
+        
+        // ===== APPLICATION STATE =====
+        // Centralized state object following single source of truth principle
+        const state = {
+            currentCompliment: null,
+            currentCategory: null,
+            complimentsGenerated: 0,
+            complimentsShared: 0,
+            recentCompliments: [], // Tracks last 10 to prevent repetition
+            isGenerating: false
+        };
+        
+        // ===== COMPLIMENT DATABASE =====
+        /**
+         * Organized by category for smart selection and variety
+         * Each compliment is crafted to feel authentic and specific
+         * Avoids generic phrases like "you're nice" or "you're great"
+         */
+        const compliments = {
+            // Appearance-based compliments (specific, not superficial)
+            appearance: [
+                "Your smile has a way of making everyone around you feel at ease.",
+                "You have an incredible sense of style that's uniquely you.",
+                "The way you carry yourself radiates confidence and warmth.",
+                "Your eyes light up when you talk about things you're passionate about.",
+                "You have one of those faces that people instantly trust.",
+                "Your laugh is genuinely contagious in the best way possible.",
+                "You have a presence that makes any room feel more welcoming.",
+                "The energy you bring into a space is absolutely magnetic.",
+                "Your authentic self is your best look, and you wear it well.",
+                "There's something about your vibe that just feels right."
+            ],
+            
+            // Personality and character traits
+            personality: [
+                "You have this rare ability to make people feel truly heard.",
+                "Your empathy for others is one of your greatest strengths.",
+                "You approach challenges with a resilience that's inspiring.",
+                "The way you find humor in difficult situations is a gift.",
+                "Your curiosity about the world makes you fascinating to talk to.",
+                "You have a knack for bringing out the best in people.",
+                "Your authenticity in a world of pretense is refreshing.",
+                "The kindness you show, even in small moments, doesn't go unnoticed.",
+                "You have this wonderful balance of being both driven and grounded.",
+                "Your ability to stay true to your values is genuinely admirable.",
+                "You make people feel valued just by giving them your attention.",
+                "Your perspective on life is both unique and thought-provoking.",
+                "The way you handle setbacks with grace is remarkable.",
+                "You have an emotional intelligence that makes people feel safe around you.",
+                "Your optimism isn't naive—it's a conscious choice, and that's powerful."
+            ],
+            
+            // Skills and abilities (specific, not vague)
+            skills: [
+                "You have this incredible talent for explaining complex ideas simply.",
+                "The way you problem-solve shows real creativity and insight.",
+                "Your attention to detail in your work never goes unnoticed.",
+                "You have a gift for bringing people together around a common goal.",
+                "The questions you ask reveal how deeply you think about things.",
+                "Your ability to adapt to new situations is genuinely impressive.",
+                "You have a talent for making others feel comfortable being themselves.",
+                "The way you listen—really listen—is a rare and valuable skill.",
+                "Your creative thinking brings fresh perspectives to every conversation.",
+                "You have this ability to see potential where others see obstacles.",
+                "The way you synthesize information shows serious intellectual depth.",
+                "Your communication style makes complex topics accessible to everyone.",
+                "You have an instinct for knowing exactly what needs to be said.",
+                "The effort you put into growing and learning is truly admirable.",
+                "Your ability to stay calm under pressure is a strength worth recognizing."
+            ],
+            
+            // General positive affirmations (avoiding clichés)
+            general: [
+                "The world is genuinely better with you in it.",
+                "You're exactly the kind of person people are lucky to know.",
+                "The impact you have on others is more significant than you realize.",
+                "You're doing a better job at this whole 'life' thing than you give yourself credit for.",
+                "Your contribution to the people around you is irreplaceable.",
+                "You bring a unique value to every situation you're part of.",
+                "The way you show up for yourself and others deserves recognition.",
+                "You're building something meaningful with the life you're living.",
+                "The care you put into your relationships makes a real difference.",
+                "You have this wonderful way of making ordinary moments feel special.",
+                "Your presence in people's lives is a gift they don't take for granted.",
+                "You're writing a story with your life that's worth telling.",
+                "The growth you've shown is a testament to your character.",
+                "You're proof that good people still exist in this world.",
+                "The authenticity you bring to everything you do is inspiring."
+            ]
+        };
+        
+        // ===== WEIGHTED CATEGORY SELECTION =====
+        /**
+         * Different categories have different weights to balance variety
+         * Personality and skills get higher weight as they feel more meaningful
+         * This creates a better overall experience while maintaining variety
+         */
+        const categoryWeights = {
+            appearance: 1,
+            personality: 2,  // Higher weight = more likely to be selected
+            skills: 2,
+            general: 1.5
+        };
+        
+        // ===== DOM ELEMENT REFERENCES =====
+        // Cache DOM queries for performance
+        const elements = {
+            complimentText: document.getElementById('complimentText'),
+            categoryBadge: document.getElementById('categoryBadge'),
+            generateBtn: document.getElementById('generateBtn'),
+            copyBtn: document.getElementById('copyBtn'),
+            twitterBtn: document.getElementById('twitterBtn'),
+            facebookBtn: document.getElementById('facebookBtn'),
+            toast: document.getElementById('toast'),
+            toastMessage: document.getElementById('toastMessage'),
+            complimentsGenerated: document.getElementById('complimentsGenerated'),
+            complimentsShared: document.getElementById('complimentsShared')
+        };
+        
+        // ===== UTILITY FUNCTIONS =====
+        
+        /**
+         * Weighted random selection
+         * Allows certain categories to appear more frequently based on weights
+         * More sophisticated than simple random for better UX
+         */
+        function getWeightedRandomCategory() {
+            const categories = Object.keys(categoryWeights);
+            const totalWeight = Object.values(categoryWeights).reduce((sum, weight) => sum + weight, 0);
+            
+            let random = Math.random() * totalWeight;
+            
+            for (const category of categories) {
+                random -= categoryWeights[category];
+                if (random <= 0) {
+                    return category;
+                }
+            }
+            
+            return categories[0]; // Fallback
+        }
+        
+        /**
+         * Check if compliment was recently shown
+         * Prevents user from seeing same compliment twice in quick succession
+         * Improves perceived variety and quality
+         */
+        function isRecentCompliment(compliment) {
+            return state.recentCompliments.includes(compliment);
+        }
+        
+        /**
+         * Add compliment to recent history
+         * Maintains a sliding window of last 10 compliments
+         * FIFO queue implementation
+         */
+        function addToRecentHistory(compliment) {
+            state.recentCompliments.push(compliment);
+            // Keep only last 10 compliments in history
+            if (state.recentCompliments.length > 10) {
+                state.recentCompliments.shift();
+            }
+        }
+        
+        /**
+         * Smart compliment selection algorithm
+         * 1. Select category using weighted randomization
+         * 2. Filter out recently shown compliments
+         * 3. Random selection from filtered pool
+         * 4. Fallback to any compliment if all were recent (edge case)
+         */
+        function getRandomCompliment() {
+            const category = getWeightedRandomCategory();
+            const categoryCompliments = compliments[category];
+            
+            // Filter out recent compliments for better variety
+            const availableCompliments = categoryCompliments.filter(
+                c => !isRecentCompliment(c)
+            );
+            
+            // If all compliments were recent (unlikely but possible), use any
+            const pool = availableCompliments.length > 0 ? availableCompliments : categoryCompliments;
+            
+            const randomIndex = Math.floor(Math.random() * pool.length);
+            const selectedCompliment = pool[randomIndex];
+            
+            return {
+                text: selectedCompliment,
+                category: category
+            };
+        }
+        
+        /**
+         * Format category name for display
+         * Converts 'appearance' to 'Appearance', etc.
+         */
+        function formatCategoryName(category) {
+            return category.charAt(0).toUpperCase() + category.slice(1);
+        }
+        
+        /**
+         * Show toast notification
+         * Provides visual feedback for user actions
+         */
+        function showToast(message) {
+            elements.toastMessage.textContent = message;
+            elements.toast.classList.add('show');
+            
+            setTimeout(() => {
+                elements.toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        /**
+         * Update statistics display
+         * Animates number changes for better UX
+         */
+        function updateStats() {
+            elements.complimentsGenerated.textContent = state.complimentsGenerated;
+            elements.complimentsShared.textContent = state.complimentsShared;
+        }
+        
+        /**
+         * Generate and display new compliment
+         * Main application logic with smooth animations
+         */
+        function generateCompliment() {
+            // Prevent spam clicking
+            if (state.isGenerating) return;
+            
+            state.isGenerating = true;
+            elements.generateBtn.disabled = true;
+            
+            // Fade out current compliment
+            elements.complimentText.classList.add('fade-out');
+            
+            setTimeout(() => {
+                // Get new compliment
+                const { text, category } = getRandomCompliment();
+                
+                // Update state
+                state.currentCompliment = text;
+                state.currentCategory = category;
+                state.complimentsGenerated++;
+                addToRecentHistory(text);
+                
+                // Update UI
+                elements.complimentText.textContent = text;
+                elements.complimentText.classList.remove('compliment-placeholder', 'fade-out');
+                elements.complimentText.classList.add('fade-in');
+                
+                // Show category badge
+                elements.categoryBadge.textContent = formatCategoryName(category);
+                elements.categoryBadge.classList.add('visible');
+                
+                // Show copy button after first generation
+                elements.copyBtn.style.display = 'flex';
+                
+                // Update stats
+                updateStats();
+                
+                // Re-enable button
+                setTimeout(() => {
+                    state.isGenerating = false;
+                    elements.generateBtn.disabled = false;
+                    elements.complimentText.classList.remove('fade-in');
+                }, 500);
+            }, 300);
+        }
+        
+        /**
+         * Copy compliment to clipboard
+         * Uses modern Clipboard API with fallback
+         */
+        async function copyToClipboard() {
+            if (!state.currentCompliment) return;
+            
+            try {
+                await navigator.clipboard.writeText(state.currentCompliment);
+                showToast('Copied to clipboard!');
+            } catch (err) {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = state.currentCompliment;
+                textArea.style.position = 'fixed';
+                textArea.style.opacity = '0';
+                document.body.appendChild(textArea);
+                textArea.select();
+                
+                try {
+                    document.execCommand('copy');
+                    showToast('Copied to clipboard!');
+                } catch (err) {
+                    showToast('Failed to copy');
+                }
+                
+                document.body.removeChild(textArea);
+            }
+        }
+        
+        /**
+         * Share to Twitter
+         * Opens share dialog with pre-filled compliment
+         */
+        function shareToTwitter() {
+            if (!state.currentCompliment) return;
+            
+            const text = `${state.currentCompliment}\n\nGet your own compliment at ${window.location.href}`;
+            const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+            
+            window.open(url, '_blank', 'width=550,height=420');
+            
+            state.complimentsShared++;
+            updateStats();
+            showToast('Opening Twitter...');
+        }
+        
+        /**
+         * Share to Facebook
+         * Opens share dialog
+         */
+        function shareToFacebook() {
+            if (!state.currentCompliment) return;
+            
+            const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(state.currentCompliment)}`;
+            
+            window.open(url, '_blank', 'width=550,height=420');
+            
+            state.complimentsShared++;
+            updateStats();
+            showToast('Opening Facebook...');
+        }
+        
+        // ===== EVENT LISTENERS =====
+        
+        elements.generateBtn.addEventListener('click', generateCompliment);
+        elements.copyBtn.addEventListener('click', copyToClipboard);
+        elements.twitterBtn.addEventListener('click', shareToTwitter);
+        elements.facebookBtn.addEventListener('click', shareToFacebook);
+        
+        // Keyboard accessibility - Enter key triggers button clicks
+        elements.generateBtn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') generateCompliment();
+        });
+        
+        elements.copyBtn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') copyToClipboard();
+        });
+        
+        // ===== INITIALIZATION =====
+        
+        /**
+         * Application initialization
+         * Sets up initial state and prepares UI
+         */
+        function init() {
+            // Set initial stats
+            updateStats();
+            
+            // Add subtle entrance animation
+            document.querySelector('.container').style.opacity = '0';
+            setTimeout(() => {
+                document.querySelector('.container').style.opacity = '1';
+            }, 100);
+        }
+        
+        // Initialize app when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>
