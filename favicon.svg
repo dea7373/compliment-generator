@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Soft pink background circle -->
+  <circle cx="50" cy="50" r="48" fill="#FFB3C1"/>
+  <circle cx="50" cy="50" r="45" fill="#FFB3C1"/>
+  
+  <!-- CG initials in fancy script -->
+  <text x="46" y="52" font-family="Brush Script MT, cursive" font-size="52" font-weight="bold" fill="#FFF8F0" text-anchor="middle" dominant-baseline="middle" font-style="italic" letter-spacing="-2">CG</text>
+</svg>
