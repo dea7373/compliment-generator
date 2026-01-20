@@ -6,6 +6,9 @@
     <title>Authentic Compliment Generator - Spread Positivity</title>
     <meta name="description" content="Generate personalized, authentic compliments to brighten your day">
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    
     <!-- Font Imports -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -114,6 +117,55 @@
             animation-delay: 10s;
         }
         
+        /* Sparkle animation - diamond/star shimmer effect */
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-coral);
+            opacity: 0;
+            animation: sparkle 3s infinite;
+        }
+        
+        /* Create diamond/star shape using pseudo-elements */
+        .sparkle::before,
+        .sparkle::after {
+            content: '';
+            position: absolute;
+            background: inherit;
+        }
+        
+        /* Vertical bar of the star */
+        .sparkle::before {
+            width: 2px;
+            height: 100%;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+        }
+        
+        /* Horizontal bar of the star */
+        .sparkle::after {
+            width: 100%;
+            height: 2px;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        @keyframes sparkle {
+            0%, 100% {
+                opacity: 0;
+                transform: scale(0) rotate(0deg);
+                filter: brightness(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2) rotate(45deg);
+                filter: brightness(1.5) drop-shadow(0 0 4px currentColor);
+            }
+        }
+        
         @keyframes float {
             0%, 100% {
                 transform: translate(0, 0) scale(1);
@@ -207,6 +259,7 @@
         .compliment-container {
             min-height: 180px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             margin-bottom: var(--space-lg);
@@ -239,6 +292,29 @@
             line-height: 1.5;
             position: relative;
             z-index: 1;
+        }
+        
+        /* Punchline styling */
+        .punchline {
+            margin-top: var(--space-sm);
+            font-style: italic;
+            color: var(--primary-coral);
+            opacity: 0;
+        }
+        
+        .punchline.visible {
+            animation: punchlineReveal 0.5s var(--transition-medium) forwards;
+        }
+        
+        @keyframes punchlineReveal {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         /* Initial state placeholder */
@@ -512,8 +588,8 @@
     </style>
 </head>
 <body>
-    <!-- Animated background orbs -->
-    <div class="background-orbs">
+    <!-- Animated background orbs with sparkles -->
+    <div class="background-orbs" id="backgroundOrbs">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
         <div class="orb orb-3"></div>
@@ -545,9 +621,11 @@
         
         <!-- Compliment display area -->
         <div class="compliment-container">
-            <p class="compliment-text compliment-placeholder" id="complimentText">
-                Click the button below to receive your personalized compliment
-            </p>
+            <div id="contentWrapper">
+                <p class="compliment-text compliment-placeholder" id="complimentText">
+                    Click the button below to receive your personalized compliment
+                </p>
+            </div>
         </div>
         
         <!-- Primary action buttons -->
@@ -558,7 +636,7 @@
                 </svg>
                 Generate Compliment
             </button>
-            <button class="btn btn-secondary" id="copyBtn" aria-label="Copy compliment to clipboard" style="display: none;">
+            <button class="btn btn-secondary" id="copyBtn" aria-label="Copy to clipboard" style="display: none;">
                 <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                 </svg>
@@ -615,11 +693,82 @@
         const state = {
             currentCompliment: null,
             currentCategory: null,
+            currentContent: null, // Stores current compliment or joke
+            currentMode: null, // 'compliment' or 'joke'
             complimentsGenerated: 0,
             complimentsShared: 0,
             recentCompliments: [], // Tracks last 10 to prevent repetition
+            recentJokes: [], // Tracks last 5 jokes to prevent repetition
             isGenerating: false
         };
+        
+        // ===== JOKE DATABASE =====
+        /**
+         * Family-friendly jokes with setup and punchline structure
+         * Some jokes are one-liners (punchline is null)
+         */
+        const jokes = [
+            {
+                setup: "Why don't scientists trust atoms?",
+                punchline: "Because they make up everything!"
+            },
+            {
+                setup: "What do you call a bear with no teeth?",
+                punchline: "A gummy bear!"
+            },
+            {
+                setup: "Why did the scarecrow win an award?",
+                punchline: "Because he was outstanding in his field!"
+            },
+            {
+                setup: "What do you call a fish wearing a bowtie?",
+                punchline: "Sofishticated!"
+            },
+            {
+                setup: "Why don't eggs tell jokes?",
+                punchline: "They'd crack each other up!"
+            },
+            {
+                setup: "What did the ocean say to the beach?",
+                punchline: "Nothing, it just waved!"
+            },
+            {
+                setup: "Why did the bicycle fall over?",
+                punchline: "Because it was two-tired!"
+            },
+            {
+                setup: "What do you call a dinosaur that crashes his car?",
+                punchline: "Tyrannosaurus Wrecks!"
+            },
+            {
+                setup: "Why don't skeletons fight each other?",
+                punchline: "They don't have the guts!"
+            },
+            {
+                setup: "What's orange and sounds like a parrot?",
+                punchline: "A carrot!"
+            },
+            {
+                setup: "Why did the math book look so sad?",
+                punchline: "Because it had too many problems!"
+            },
+            {
+                setup: "What do you call a sleeping bull?",
+                punchline: "A bulldozer!"
+            },
+            {
+                setup: "Why can't a nose be 12 inches long?",
+                punchline: "Because then it would be a foot!"
+            },
+            {
+                setup: "What did one wall say to the other wall?",
+                punchline: "I'll meet you at the corner!"
+            },
+            {
+                setup: "Why do bees have sticky hair?",
+                punchline: "Because they use honeycombs!"
+            }
+        ];
         
         // ===== COMPLIMENT DATABASE =====
         /**
@@ -717,6 +866,7 @@
         // Cache DOM queries for performance
         const elements = {
             complimentText: document.getElementById('complimentText'),
+            contentWrapper: document.getElementById('contentWrapper'),
             categoryBadge: document.getElementById('categoryBadge'),
             generateBtn: document.getElementById('generateBtn'),
             copyBtn: document.getElementById('copyBtn'),
@@ -725,7 +875,8 @@
             toast: document.getElementById('toast'),
             toastMessage: document.getElementById('toastMessage'),
             complimentsGenerated: document.getElementById('complimentsGenerated'),
-            complimentsShared: document.getElementById('complimentsShared')
+            complimentsShared: document.getElementById('complimentsShared'),
+            backgroundOrbs: document.getElementById('backgroundOrbs')
         };
         
         // ===== UTILITY FUNCTIONS =====
@@ -802,6 +953,32 @@
         }
         
         /**
+         * Get random joke with history tracking
+         */
+        function getRandomJoke() {
+            // Filter out recent jokes
+            const availableJokes = jokes.filter(
+                j => !state.recentJokes.includes(j.setup)
+            );
+            
+            const pool = availableJokes.length > 0 ? availableJokes : jokes;
+            const randomIndex = Math.floor(Math.random() * pool.length);
+            
+            return pool[randomIndex];
+        }
+        
+        /**
+         * Add joke to recent history
+         */
+        function addJokeToHistory(setup) {
+            state.recentJokes.push(setup);
+            // Keep only last 5 jokes in history
+            if (state.recentJokes.length > 5) {
+                state.recentJokes.shift();
+            }
+        }
+        
+        /**
          * Format category name for display
          * Converts 'appearance' to 'Appearance', etc.
          */
@@ -851,14 +1028,23 @@
                 
                 // Update state
                 state.currentCompliment = text;
+                state.currentContent = text;
                 state.currentCategory = category;
+                state.currentMode = 'compliment';
                 state.complimentsGenerated++;
                 addToRecentHistory(text);
                 
-                // Update UI
-                elements.complimentText.textContent = text;
-                elements.complimentText.classList.remove('compliment-placeholder', 'fade-out');
-                elements.complimentText.classList.add('fade-in');
+                // Clear wrapper and add single text element
+                elements.contentWrapper.innerHTML = '';
+                const textEl = document.createElement('p');
+                textEl.className = 'compliment-text';
+                textEl.id = 'complimentText';
+                textEl.textContent = text;
+                elements.contentWrapper.appendChild(textEl);
+                elements.complimentText = textEl;
+                
+                // Fade in
+                textEl.classList.add('fade-in');
                 
                 // Show category badge
                 elements.categoryBadge.textContent = formatCategoryName(category);
@@ -874,7 +1060,7 @@
                 setTimeout(() => {
                     state.isGenerating = false;
                     elements.generateBtn.disabled = false;
-                    elements.complimentText.classList.remove('fade-in');
+                    textEl.classList.remove('fade-in');
                 }, 500);
             }, 300);
         }
@@ -884,15 +1070,15 @@
          * Uses modern Clipboard API with fallback
          */
         async function copyToClipboard() {
-            if (!state.currentCompliment) return;
+            if (!state.currentContent) return;
             
             try {
-                await navigator.clipboard.writeText(state.currentCompliment);
+                await navigator.clipboard.writeText(state.currentContent);
                 showToast('Copied to clipboard!');
             } catch (err) {
                 // Fallback for older browsers
                 const textArea = document.createElement('textarea');
-                textArea.value = state.currentCompliment;
+                textArea.value = state.currentContent;
                 textArea.style.position = 'fixed';
                 textArea.style.opacity = '0';
                 document.body.appendChild(textArea);
@@ -914,9 +1100,9 @@
          * Opens share dialog with pre-filled compliment
          */
         function shareToTwitter() {
-            if (!state.currentCompliment) return;
+            if (!state.currentContent) return;
             
-            const text = `${state.currentCompliment}\n\nGet your own compliment at ${window.location.href}`;
+            const text = `${state.currentContent}\n\nGet your own compliment at ${window.location.href}`;
             const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
             
             window.open(url, '_blank', 'width=550,height=420');
@@ -931,15 +1117,48 @@
          * Opens share dialog
          */
         function shareToFacebook() {
-            if (!state.currentCompliment) return;
+            if (!state.currentContent) return;
             
-            const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(state.currentCompliment)}`;
+            const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(state.currentContent)}`;
             
             window.open(url, '_blank', 'width=550,height=420');
             
             state.complimentsShared++;
             updateStats();
             showToast('Opening Facebook...');
+        }
+        
+        /**
+         * Create sparkle elements for background
+         * Generates random sparkles across the viewport with diamond/star shapes
+         */
+        function createSparkles() {
+            const sparkleCount = 30;
+            const colors = ['var(--primary-coral)', 'var(--gentle-peach)', 'var(--sage-green)'];
+            
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                
+                // Random position
+                sparkle.style.left = `${Math.random() * 100}%`;
+                sparkle.style.top = `${Math.random() * 100}%`;
+                
+                // Random color from palette
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                sparkle.style.color = color;
+                
+                // Random animation delay and duration for varied shimmer
+                sparkle.style.animationDelay = `${Math.random() * 3}s`;
+                sparkle.style.animationDuration = `${2 + Math.random() * 2}s`;
+                
+                // Random size variation
+                const size = 3 + Math.random() * 5;
+                sparkle.style.width = `${size}px`;
+                sparkle.style.height = `${size}px`;
+                
+                elements.backgroundOrbs.appendChild(sparkle);
+            }
         }
         
         // ===== EVENT LISTENERS =====
@@ -967,6 +1186,9 @@
         function init() {
             // Set initial stats
             updateStats();
+            
+            // Create sparkle background
+            createSparkles();
             
             // Add subtle entrance animation
             document.querySelector('.container').style.opacity = '0';
